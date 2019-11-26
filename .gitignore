@@ -1,4 +1,4 @@
-.idea/
+.idea/*
 skill_abc_project/configs/__pycache__/
 skill_abc_project/skill_abc_admin/__pycache__/
 skill_abc_project/skill_abc_admin/migrations/__pycache__/
