@@ -21,8 +21,8 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^skill_abc_admin/', admin.site.urls),
-    url(r'^admin/', include('skill_abc_admin.urls', namespace='skill_abc_admin')),
+    url(r'^admin/', admin.site.urls),
+    url(r'^skill_abc_admin/', include('skill_abc_admin.urls', namespace='skill_abc_admin')),
     url(r'^wow_skills/', include('wow_skills.urls', namespace='wow_skills')),
     url(r'^__debug__/', include(debug_toolbar.urls)),
 ]

@@ -9,12 +9,17 @@
     <title>{% block title %}wow skills{% endblock %}</title>
     {% block local_css %}
     {% endblock %}
+    <script type="text/javascript" src={% static_url "common/js/jquery.1.12.4.min.js" %}></script>
+    <script type="text/javascript" src={% static_url "common/js/jquery-ui.1.12.1.min.js" %}></script>
 </head>
 <body>
 
 {% block navbar %}
 {% endblock %}
 <div id="debug_toolbar" style="position: fixed;;top:0;font-size:13px;background:#fe4e65;background-color:#fe4e65;color:#ffffff;width:100%;left:0;z-index:1500"></div>
+
+{% block content %}
+{% endblock %}
 <footer>
 </footer>
 
