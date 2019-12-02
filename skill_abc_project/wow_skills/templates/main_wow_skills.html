@@ -20,38 +20,35 @@
 
 <div id="result_display_wrap" style="margin-top: 50px;">
     <div class="result_row">
-        <form action="{% url 'wow_skills:add_wow_skill_info' %}" name="get_wow_skill_info" id="form_room" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <!--<img src="https://wow.zamimg.com/images/wow/icons/large/spell_shadow_ritualofsacrifice.jpg" alt="" style="vertical-align: middle;">
-            <span style="vertical-align: middle;">사악한 일격</span>-->
-            <div>
-                skill_id : <span id="skill_id"></span>
-            </div>
-            <div>
-                name : <span id="skill_name"></span>
-            </div>
-            <div>
-                icon : <span id="skill_icon"></span>
-            </div>
-            <div>
-                icon_img : <img src="" id="skill_icon_img">
-            </div>
-            <div>
-                description : <span id="skill_description"></span>
-            </div>
-            <div>
-                castTime : <span id="skill_cast_time"></span>
-            </div>
-            <div>
-                powerCost : <span id="skill_power_cost"></span>
-            </div>
-            <div>
-                range : <span id="skill_range"></span>
-            </div>
-            <div>
-                cooldown : <span id="skill_cool_down"></span>
-            </div>
-        </form>
+        <!--<img src="https://wow.zamimg.com/images/wow/icons/large/spell_shadow_ritualofsacrifice.jpg" alt="" style="vertical-align: middle;">
+        <span style="vertical-align: middle;">사악한 일격</span>-->
+        <div>
+            <img src="" id="skill_icon_img">
+        </div>
+        <div>
+            skill_id : <span id="skill_id"></span>
+        </div>
+        <div>
+            name : <span id="skill_name"></span>
+        </div>
+        <div>
+            icon : <span id="skill_icon"></span>
+        </div>
+        <div>
+            description : <span id="skill_description"></span>
+        </div>
+        <div>
+            castTime : <span id="skill_cast_time"></span>
+        </div>
+        <div>
+            powerCost : <span id="skill_power_cost"></span>
+        </div>
+        <div>
+            range : <span id="skill_range"></span>
+        </div>
+        <div>
+            cooldown : <span id="skill_cool_down"></span>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -20,7 +20,14 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.IndexView.as_view(), name='index'),
+    # db에서 wow 스킬 조회
+    url(r'^get_wow_skill_info/$', views.GetWowSkillInfoView.as_view(),
+        name='get_wow_skill_info'),
+
+    url(r'^admin/$', views.AdminView.as_view(), name='admin'),
     # blizzard api를 이용해 wow 스킬 조회
-    url(r'^get_wow_skill_info/$', views.GetWowSkillInfoView.as_view(), name='get_wow_skill_info'),
+    url(r'^get_wow_skill_info_from_blizzard/$', views.GetWowSkillInfoFromBlizzardView.as_view(),
+        name='get_wow_skill_info_from_blizzard'),
+
     url(r'^add_wow_skill_info/$', views.add_wow_skill_info_logic, name='add_wow_skill_info'),
 ]

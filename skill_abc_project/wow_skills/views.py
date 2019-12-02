@@ -22,6 +22,29 @@ class GetWowSkillInfoView(View):
     def get(self, request):
         skill_id = request.GET.get('skill_id')
         error_message = None
+        # access_token = func_get_blizzard_token()
+        skill_info = {}
+        # if access_token['error_message'] is None:
+        #     skill_info = func_get_wow_skill_info(skill_id, access_token['access_token'])
+        # else:
+        #     error_message = access_token['error_message']
+
+        return JsonResponse(skill_info, json_dumps_params={'ensure_ascii': True})
+
+
+class AdminView(TemplateView):
+    template_name = 'main_wow_skills_admin.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AdminView, self).get_context_data(**kwargs)
+        return context
+
+
+class GetWowSkillInfoFromBlizzardView(View):
+
+    def get(self, request):
+        skill_id = request.GET.get('skill_id')
+        error_message = None
         access_token = func_get_blizzard_token()
         skill_info = {}
         if access_token['error_message'] is None:

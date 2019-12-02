@@ -20,6 +20,7 @@ class WowJobTb(TimeStampedModel):
 
 class WowProTypeTb(TimeStampedModel):
     id = models.BigAutoField(db_column='id', primary_key=True, max_length=20, null=False)
+    wow_job_tb = models.ForeignKey(WowJobTb, on_delete=models.CASCADE, default='')
     pro_type_cd = models.CharField(db_column='pro_type_cd', max_length=20, blank=True, default='')
     name = models.CharField(db_column='name', max_length=255, blank=True, default='')
     description = models.CharField(db_column='description', max_length=255, blank=True, default='')
@@ -35,8 +36,8 @@ class WowProTypeTb(TimeStampedModel):
 
 class WowProSkillTb(TimeStampedModel):
     id = models.BigAutoField(db_column='id', primary_key=True, max_length=20, null=False)
-    job_cd = models.CharField(db_column='job_cd', max_length=20, blank=True, default='')
-    pro_type_cd = models.CharField(db_column='pro_type_cd', max_length=20, blank=True, default='')
+    wow_job_tb = models.ForeignKey(WowJobTb, on_delete=models.CASCADE, default='')
+    wow_pro_type_tb = models.ForeignKey(WowProTypeTb, on_delete=models.CASCADE, default='')
     skill_id = models.CharField(db_column='skill_id', max_length=20, blank=True, default='')
     name = models.CharField(db_column='name', max_length=255, blank=True, default='')
     description = models.CharField(db_column='description', max_length=3000, blank=True, default='')

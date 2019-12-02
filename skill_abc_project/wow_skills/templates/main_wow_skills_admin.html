@@ -6,19 +6,106 @@
 
 {% block content %}
 <div id="search_tool_wrap" style="display:flex;height:40px;">
-    <div style="flex:1 1 0;padding-right:20px;height:100%">
-        <input type="text" style="width:100%;height:100%;box-sizing: border-box;font-size:18px;font-weight:500">
-    </div>
-    <div style="flex-basis:110px;height:100%">
-        <button style="height:100%;">검색</button>
-        <button style="height:100%;">전체</button>
-    </div>
+    <form action="{% url 'wow_skills:get_wow_skill_info_from_blizzard' %}" name="get_wow_skill_info" id="form_get_wow_skill_info" method="get">
+        {% csrf_token %}
+        <div style="flex:1 1 0;padding-right:20px;height:100%">
+            <input type="text" name="skill_id" style="width:100%;height:100%;box-sizing: border-box;font-size:18px;font-weight:500">
+        </div>
+        <div style="flex-basis:110px;height:100%">
+            <button id="get_wow_skill_form_submit" style="height:100%;">검색</button>
+            <button style="height:100%;">초기화</button>
+        </div>
+    </form>
 </div>
 
-<div id="result_display_wrap">
-
+<div id="result_display_wrap" style="margin-top: 50px;">
+    <div class="result_row">
+        <form action="{% url 'wow_skills:add_wow_skill_info' %}" name="get_wow_skill_info" id="form_room" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!--<img src="https://wow.zamimg.com/images/wow/icons/large/spell_shadow_ritualofsacrifice.jpg" alt="" style="vertical-align: middle;">
+            <span style="vertical-align: middle;">사악한 일격</span>-->
+            <div>
+                <img src="" id="skill_icon_img">
+            </div>
+            <div>
+                skill_id : <span id="skill_id"></span>
+            </div>
+            <div>
+                name : <span id="skill_name"></span>
+            </div>
+            <div>
+                icon : <span id="skill_icon"></span>
+            </div>
+            <div>
+                description : <span id="skill_description"></span>
+            </div>
+            <div>
+                castTime : <span id="skill_cast_time"></span>
+            </div>
+            <div>
+                powerCost : <span id="skill_power_cost"></span>
+            </div>
+            <div>
+                range : <span id="skill_range"></span>
+            </div>
+            <div>
+                cooldown : <input type="text" name="cool_down" id="skill_cool_down">
+            </div>
+            <button id="add_wow_skill_form_submit" style="height:100%;">등</button>
+        </form>
+    </div>
 </div>
 {% endblock %}
 
 {% block local_js_footer %}
+    <script>
+
+    $('#form_submit').click(function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        $.ajax({
+            url: '/wow_skills/get_wow_skill_info_from_blizzard/',
+            data: $('#form_get_wow_skill_info').serialize(),
+            dataType: 'json',
+            type: 'GET',
+
+            beforeSend: function () {
+                $('#skill_id').val('');
+                $('#skill_name').val('');
+                $('#skill_icon').val('');
+                $('#skill_description').val('');
+                $('#skill_cast_time').val('');
+                $('#skill_power_cost').val('');
+                $('#skill_range').val('');
+                $('#skill_cool_down').val('');
+                $('#skill_icon_img').attr('src', '');
+            },
+
+            success: function (data) {
+                console.log(data);
+                console.log(data.powerCost);
+                $('#skill_id').val(data.id);
+                $('#skill_name').val(data.name);
+                $('#skill_icon').val(data.icon);
+                $('#skill_description').val(data.description);
+                $('#skill_cast_time').val(data.castTime);
+                $('#skill_power_cost').val(data.powerCost);
+                $('#skill_range').val(data.range);
+                $('#skill_cool_down').val(data.cooldown);
+                $('#skill_icon_img').attr('src', 'https://wow.zamimg.com/images/wow/icons/large/'+data.icon+'.jpg');
+                if(Object.keys(data).length == 0){
+                    $('#skill_icon_img').attr('src', '');
+                    alert('blizzard api에 없는 skill 입니다.');
+                }
+            },
+
+            complete: function () {
+            },
+
+            error: function () {
+            }
+        });
+    });
+
+    </script>
 {% endblock %}
