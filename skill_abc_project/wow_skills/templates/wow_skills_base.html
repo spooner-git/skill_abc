@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="skillabc_dark_mode">
 <head>
     {% load static_url %}
     <meta charset="utf-8">
@@ -9,12 +9,18 @@
     <title>{% block title %}wow skills{% endblock %}</title>
     {% block local_css %}
     {% endblock %}
+    <link rel="stylesheet" href={% static_url "user/css/base.css" %}>
 </head>
 <body>
 
-{% block navbar %}
+<div style="font-size:32px;font-weight:900">
+    WOW 스킬
+    <span style="color:#fe4e65">A</span><span style="color: blue;">B</span><span style="color: forestgreen;">C</span>
+</div>
+
+{% block content %}
 {% endblock %}
-<div id="debug_toolbar" style="position: fixed;;top:0;font-size:13px;background:#fe4e65;background-color:#fe4e65;color:#ffffff;width:100%;left:0;z-index:1500"></div>
+
 <footer>
 </footer>
 
