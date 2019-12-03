@@ -1,0 +1,44 @@
+.skill_info_row{
+    width: 100%;
+    padding: 5px 0px;
+    box-sizing: border-box;
+    height: auto;
+}
+.skill_info_title{
+    font-size: 13px;
+    color: var(--font-sub-normal);
+}
+.skill_info_content{
+
+}
+
+
+.skill_info_content > input{
+    width: 100%;
+    height: 40px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.skill_info_content > textarea{
+    width: 100%;
+    height: 80px;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 20px;
+}
+
+
+#add_wow_skill_form_submit{
+    height: 35px;
+    width: 100%;
+}
+
+#skill_icon_wrapper{
+    border: var(--border-article);
+    box-shadow: var(--box-shadow-article); 
+    background-color: var(--bg-article);
+    padding:10px;
+    text-align: center;
+    box-sizing: border-box;
+    border-radius: 3px;
+}
