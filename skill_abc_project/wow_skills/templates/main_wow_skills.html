@@ -29,7 +29,9 @@
         <div>
             <img src="" id="skill_icon_img">
         </div>
-        <div id="description_wrapper">
+        <div id="description_wrapper" style="display: inline-block;">
+        </div>
+        <div id="description_wrapper_img">
         </div>
     </div>
 </div>
@@ -74,17 +76,17 @@
                     return;
                 }
                 
-                // $('#skill_id').text(data.id);
-                // $('#skill_name').text(data.name);
-                // $('#skill_icon').text(data.icon);
-                // $('#skill_description').text(data.description);
-                // $('#skill_cast_time').text(data.castTime);
-                // $('#skill_power_cost').text(data.powerCost);
-                // $('#skill_range').text(data.range);
-                // $('#skill_cool_down').text(data.cooldown);
                 $('#skill_icon_img').attr('src', 'https://wow.zamimg.com/images/wow/icons/large/'+data.icon+'.jpg');
                 let html = dom_description(data);
                 $('#description_wrapper').html(html);
+
+                setTimeout(()=>{
+                    html2canvas(document.querySelector("#description_wrapper")).then(canvas => { 
+                        
+                        let image_src = canvas.toDataURL("image/jpeg");
+                        document.querySelector('#description_wrapper_img').innerHTML = `<div>Image File</div><img src="${image_src}">`;
+                    });  
+                }, 1000);
             },
 
             complete: function () {
@@ -108,7 +110,8 @@
         let skill_description = data.description;
 
         let html = 
-                    `<div style="width:100%;max-width:300px;padding:10px;border-radius:5px;border:1px solid #f5f2f3;background-color:#161721d9;color:#ffffff;font-weight:500;font-size:14px;box-sizing:border-box">
+                    `
+                    <div style="width:100%;max-width:300px;padding:10px;border-radius:5px;border:1px solid #f5f2f3;background-color:#161721d9;color:#ffffff;font-weight:500;font-size:14px;box-sizing:border-box">
                         <div>${skill_name}</div>
                         <div style="display:flex;margin-top:3px;">
                             ${skill_cost == undefined ? "" : '<div style="flex:1 1 0">'+skill_cost+'</div>'}
