@@ -29,13 +29,13 @@
             <!--<img src="https://wow.zamimg.com/images/wow/icons/large/spell_shadow_ritualofsacrifice.jpg" alt="" style="vertical-align: middle;">
             <span style="vertical-align: middle;">사악한 일격</span>-->
             <div class="skill_info_row">
-                <input type="text" name="classes" id="classes" hidden>
-                <input type="text" name="specialize" id="specialize" hidden>
-                <select onchange="fill_jobs_admin(this);" id="info_jobs" style="">
+                <input type="text" name="wow_class" id="wow_class" hidden>
+                <input type="text" name="wow_specialize" id="specialize" hidden>
+                <select onchange="fill_class_admin(this);" id="info_wow_class" style="">
 
                 </select>
-                <select onchange="fill_specialize_admin(this);" id="info_specialize">
-                    
+                <select onchange="fill_specialize_admin(this);" id="info_wow_specialize">
+
                 </select>
             </div>
             <div class="skill_info_row">
@@ -48,35 +48,35 @@
             </div>
             <div class="skill_info_row">
                 <div class="skill_info_title">ID</div>
-                <div class="skill_info_content"><input type="text" name="skill_id" id="skill_id" disabled="true"></div>
+                <div class="skill_info_content"><input type="text" name="wow_skill_id" id="wow_skill_id" disabled="true"></div>
             </div>
             <div class="skill_info_row">
                 <div class="skill_info_title">스킬명</div>
-                <div class="skill_info_content"><input type="text" name="skill_name" id="skill_name" disabled="true"></div>
+                <div class="skill_info_content"><input type="text" name="wow_skill_name" id="wow_skill_name" disabled="true"></div>
             </div>
             <div class="skill_info_row">
                 <div class="skill_info_title">아이콘</div>
-                <div class="skill_info_content"><input type="text" name="skill_icon" id="skill_icon" disabled="true"></div>
+                <div class="skill_info_content"><input type="text" name="wow_skill_icon" id="wow_skill_icon" disabled="true"></div>
             </div>
             <div class="skill_info_row">
                 <div class="skill_info_title">설명</div>
-                <div class="skill_info_content"><textarea type="text" name="skill_description" id="skill_description" disabled="true"></textarea></div>
+                <div class="skill_info_content"><textarea type="text" name="wow_skill_description" id="wow_skill_description" disabled="true"></textarea></div>
             </div>
             <div class="skill_info_row">
                 <div class="skill_info_title">시전시간</div>
-                <div class="skill_info_content"><input type="text" name="skill_cast_time" id="skill_cast_time" disabled="true"></div>
+                <div class="skill_info_content"><input type="text" name="wow_skill_cast_time" id="wow_skill_cast_time" disabled="true"></div>
             </div>
             <div class="skill_info_row">
                 <div class="skill_info_title">마나/기력/분노..</div>
-                <div class="skill_info_content"><input type="text" name="skill_power_cost" id="skill_power_cost" disabled="true"></div>
+                <div class="skill_info_content"><input type="text" name="wow_skill_power_cost" id="wow_skill_power_cost" disabled="true"></div>
             </div>
             <div class="skill_info_row">
                 <div class="skill_info_title">사정거리</div>
-                <div class="skill_info_content"><input type="text" name="skill_range" id="skill_range" disabled="true"></div>
+                <div class="skill_info_content"><input type="text" name="wow_skill_range" id="wow_skill_range" disabled="true"></div>
             </div>
             <div class="skill_info_row">
                 <div class="skill_info_title">쿨다운</div>
-                <div class="skill_info_content"><input type="text" name="skill_cool_down" id="skill_cool_down" disabled="true"></div>
+                <div class="skill_info_content"><input type="text" name="wow_skill_cool_down" id="wow_skill_cool_down" disabled="true"></div>
             </div>
             <button id="add_wow_skill_form_submit">등록</button>
         </form>
@@ -86,7 +86,41 @@
 
 {% block local_js_footer %}
     <script>
+    var wow_class_specialize_tree = {};
 
+    window.addEventListener('load', function () {
+        $.ajax({
+            url:'/wow_skills/get_wow_class_specialize_data/',
+            type:'GET',
+            dataType : 'json',
+
+            beforeSend:function(){
+                //beforeSend();
+            },
+
+            //통신성공시 처리
+            success:function(data){
+                wow_class_specialize_tree = data;
+                console.log(wow_class_specialize_tree);
+                let classes = ['<option value="none" disabled selected>클래스 선택</option>'];
+                for(let item in wow_class_specialize_tree){
+                    classes.push(
+                            `<option value="${item}">${wow_class_specialize_tree[item]['wow_class_name']}</div>`
+                        );
+                }
+                $('#info_wow_class').html(classes.join(""));
+
+            },
+
+            //보내기후 팝업창 닫기
+            complete:function(){
+            },
+
+            //통신 실패시 처리
+            error:function(){
+            }
+        });
+    });
     function init_admin(e){
         e.preventDefault();
         e.stopPropagation();
@@ -103,15 +137,15 @@
             type: 'GET',
 
             beforeSend: function () {
-                $('#skill_id').val('');
-                $('#skill_name').val('');
-                $('#skill_icon').val('');
-                $('#skill_description').val('');
-                $('#skill_cast_time').val('');
-                $('#skill_power_cost').val('');
-                $('#skill_range').val('');
-                $('#skill_cool_down').val('');
-                $('#skill_icon_img').attr('src', '');
+                $('#wow_skill_id').val('');
+                $('#wow_skill_name').val('');
+                $('#wow_skill_icon').val('');
+                $('#wow_skill_description').val('');
+                $('#wow_skill_cast_time').val('');
+                $('#wow_skill_power_cost').val('');
+                $('#wow_skill_range').val('');
+                $('#wow_skill_cool_down').val('');
+                $('#wow_skill_icon_img').attr('src', '');
             },
 
             success: function (data) {
@@ -121,28 +155,19 @@
                     return;
                 }
                 $('input, textarea').attr("disabled", false);
-                $('#skill_id').val(data.id);
-                $('#skill_name').val(data.name);
-                $('#skill_icon').val(data.icon);
-                $('#skill_description').val(data.description);
-                $('#skill_cast_time').val(data.castTime);
-                $('#skill_power_cost').val(data.powerCost);
-                $('#skill_range').val(data.range);
-                $('#skill_cool_down').val(data.cooldown);
+                $('#wow_skill_id').val(data.id);
+                $('#wow_skill_name').val(data.name);
+                $('#wow_skill_icon').val(data.icon);
+                $('#wow_skill_description').val(data.description);
+                $('#wow_skill_cast_time').val(data.castTime);
+                $('#wow_skill_power_cost').val(data.powerCost);
+                $('#wow_skill_range').val(data.range);
+                $('#wow_skill_cool_down').val(data.cooldown);
                 // $('#skill_icon_img').attr('src', 'https://wow.zamimg.com/images/wow/icons/large/'+data.icon+'.jpg');
-                $('#skill_icon_img_small').attr({'src': 'https://wow.zamimg.com/images/wow/icons/small/'+data.icon+'.jpg', "title":data.id});
-                $('#skill_icon_img_medium').attr({'src': 'https://wow.zamimg.com/images/wow/icons/medium/'+data.icon+'.jpg', "title":data.id});
-                $('#skill_icon_img_large').attr({'src': 'https://wow.zamimg.com/images/wow/icons/large/'+data.icon+'.jpg', "title":data.id});
+                $('#wow_skill_icon_img_small').attr({'src': 'https://wow.zamimg.com/images/wow/icons/small/'+data.icon+'.jpg', "title":data.id});
+                $('#wow_skill_icon_img_medium').attr({'src': 'https://wow.zamimg.com/images/wow/icons/medium/'+data.icon+'.jpg', "title":data.id});
+                $('#wow_skill_icon_img_large').attr({'src': 'https://wow.zamimg.com/images/wow/icons/large/'+data.icon+'.jpg', "title":data.id});
 
-
-                let jobs = ['<option value="none" disabled selected>클래스 선택</option>'];
-                for(let item in wow_classes_tree["kr"]){
-                    jobs.push(
-                            `<option value="${item}">${item}</div>`
-                        );
-                }
-                $('#info_jobs').html(jobs.join(""));
-                
             },
 
             complete: function () {
@@ -153,21 +178,21 @@
         });
     }
 
-    function fill_jobs_admin(context){
-        let selected_job = $(context).val();
+    function fill_class_admin(context){
+        let selected_class = $(context).val();
         let specializes = ['<option value="none" disabled selected>전문화 선택</option>'];
-        for(let i=0; i<wow_classes_tree["kr"][selected_job].length; i++){
+        for(let i=0; i<wow_class_specialize_tree[selected_class]['wow_specialize_type_id'].length; i++){
             specializes.push(
-                `<option value="${wow_classes_tree["kr"][selected_job][i]}">${wow_classes_tree["kr"][selected_job][i]}</div>`
+                `<option value="${wow_class_specialize_tree[selected_class]['wow_specialize_type_id'][i]}">${wow_class_specialize_tree[selected_class]['wow_specialize_type_name'][i]}</div>`
             );
         }
-        $('#info_specialize').html(specializes.join(""));
-        $('#classes').val(selected_job);
+        $('#info_wow_specialize').html(specializes.join(""));
+        $('#wow_class').val(selected_class);
     }
 
     function fill_specialize_admin(context){
         let selected_specialize = $(context).val();
-        $('#specialize').val(selected_specialize);
+        $('#wow_specialize').val(selected_specialize);
     }
 
     </script>

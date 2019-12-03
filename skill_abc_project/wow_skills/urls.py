@@ -24,7 +24,12 @@ urlpatterns = [
     url(r'^get_wow_skill_info/$', views.GetWowSkillInfoView.as_view(),
         name='get_wow_skill_info'),
 
+    # db에서 wow 전문화(+직업) 조회
+    url(r'^get_wow_class_specialize_data/$', views.GetWowClassSpecializeDataView.as_view(),
+        name='get_wow_class_specialize_data'),
+
     url(r'^admin/$', views.AdminView.as_view(), name='admin'),
+
     # blizzard api를 이용해 wow 스킬 조회
     url(r'^get_wow_skill_info_from_blizzard/$', views.GetWowSkillInfoFromBlizzardView.as_view(),
         name='get_wow_skill_info_from_blizzard'),

@@ -12,8 +12,9 @@
 <div id="search_tool_wrap" style="display:flex;height:40px;">
     <form action="{% url 'wow_skills:get_wow_skill_info' %}" name="get_wow_skill_info" id="form_get_wow_skill_info" method="get" style="display: flex;width:100%;">
         {% csrf_token %}
+        <input type="hidden" name="search_type" value="name">
         <div style="flex:1 1 0;height:100%">
-            <input type="text" name="skill_id" style="width:100%;height:100%;box-sizing: border-box;font-size:18px;font-weight:500" placeholder="검색어 입력">
+            <input type="text" name="search_val" style="width:100%;height:100%;box-sizing: border-box;font-size:18px;font-weight:500" placeholder="검색어 입력">
         </div>
         <div style="flex-basis:110px;height:100%;text-align:right;">
             <button style="height:100%;" onclick="search(event);">검색</button>
@@ -48,8 +49,8 @@
         e.stopPropagation();
         e.preventDefault();
         $.ajax({
-            // url: '/wow_skills/get_wow_skill_info/',
-            url: '/wow_skills/get_wow_skill_info_from_blizzard/',
+{#            // url: '/wow_skills/get_wow_skill_info/',#}
+{#            url: '/wow_skills/get_wow_skill_info_from_blizzard/',#}
             data: $('#form_get_wow_skill_info').serialize(),
             dataType: 'json',
             type: 'GET',
