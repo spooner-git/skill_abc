@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="skillabc_dark_mode">
+<html lang="en" class="skillabc_light_mode">
 <head>
     {% load static_url %}
     <meta charset="utf-8">
@@ -20,6 +20,8 @@
 <div style="font-size:32px;font-weight:900">
     WOW 스킬
     <span style="color:#fe4e65">A</span><span style="color: cornflowerblue;">B</span><span style="color: forestgreen;">C</span>
+    {% block top_right %}
+    {% endblock %}
 </div>
 
 {% block content %}

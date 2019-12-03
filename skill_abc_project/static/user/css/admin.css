@@ -9,7 +9,7 @@
     color: var(--font-sub-normal);
 }
 .skill_info_content{
-
+    margin-top: 4px;
 }
 
 
@@ -24,7 +24,8 @@
 
 
 #add_wow_skill_form_submit{
-    height: 35px;
+    margin-top: 20px;
+    height: 50px;
     width: 100%;
 }
 
