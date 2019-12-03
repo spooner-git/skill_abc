@@ -28,30 +28,30 @@
                 <img src="" id="skill_icon_img">
             </div>
             <div>
-                skill_id : <span id="skill_id"></span>
+                skill_id : <input type="text" name="skill_id" id="skill_id">
             </div>
             <div>
-                name : <span id="skill_name"></span>
+                name : <input type="text" name="skill_name" id="skill_name">
             </div>
             <div>
-                icon : <span id="skill_icon"></span>
+                icon : <input name="skill_icon" id="skill_icon">
             </div>
             <div>
-                description : <span id="skill_description"></span>
+                description : <textarea name="skill_description" id="skill_description"></textarea>
             </div>
             <div>
-                castTime : <span id="skill_cast_time"></span>
+                castTime : <input type="text" name="skill_cast_time" id="skill_cast_time">
             </div>
             <div>
-                powerCost : <span id="skill_power_cost"></span>
+                powerCost : <input type="text" name="skill_power_cost" id="skill_power_cost">
             </div>
             <div>
-                range : <span id="skill_range"></span>
+                range : <input type="text" name="skill_range" id="skill_range">
             </div>
             <div>
                 cooldown : <input type="text" name="cool_down" id="skill_cool_down">
             </div>
-            <button id="add_wow_skill_form_submit" style="height:100%;">등</button>
+            <button id="add_wow_skill_form_submit" style="height:100%;">등록</button>
         </form>
     </div>
 </div>
@@ -60,7 +60,7 @@
 {% block local_js_footer %}
     <script>
 
-    $('#form_submit').click(function(e) {
+    $('#get_wow_skill_form_submit').click(function(e) {
         e.stopPropagation();
         e.preventDefault();
         $.ajax({
@@ -83,7 +83,6 @@
 
             success: function (data) {
                 console.log(data);
-                console.log(data.powerCost);
                 $('#skill_id').val(data.id);
                 $('#skill_name').val(data.name);
                 $('#skill_icon').val(data.icon);
