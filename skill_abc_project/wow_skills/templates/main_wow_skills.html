@@ -13,11 +13,11 @@
     <form action="{% url 'wow_skills:get_wow_skill_info' %}" name="get_wow_skill_info" id="form_get_wow_skill_info" method="get" style="display: flex;width:100%;">
         {% csrf_token %}
         <div style="flex:1 1 0;height:100%">
-            <input type="text" name="skill_id" style="width:100%;height:100%;box-sizing: border-box;font-size:18px;font-weight:500">
+            <input type="text" name="skill_id" style="width:100%;height:100%;box-sizing: border-box;font-size:18px;font-weight:500" placeholder="검색어 입력">
         </div>
-        <div style="flex-basis:110px;height:100%;text-align: right;">
-            <button id="form_submit" style="height:100%;">검색</button>
-            <button style="height:100%;">초기화</button>
+        <div style="flex-basis:110px;height:100%;text-align:right;">
+            <button style="height:100%;" onclick="search(event);">검색</button>
+            <button style="height:100%;" onclick="init(event)">초기화</button>
         </div>
     </form>
 </div>
@@ -29,29 +29,7 @@
         <div>
             <img src="" id="skill_icon_img">
         </div>
-        <div>
-            skill_id : <span id="skill_id"></span>
-        </div>
-        <div>
-            name : <span id="skill_name"></span>
-        </div>
-        <div>
-            icon : <span id="skill_icon"></span>
-        </div>
-        <div>
-            description : <span id="skill_description"></span>
-        </div>
-        <div>
-            castTime : <span id="skill_cast_time"></span>
-        </div>
-        <div>
-            powerCost : <span id="skill_power_cost"></span>
-        </div>
-        <div>
-            range : <span id="skill_range"></span>
-        </div>
-        <div>
-            cooldown : <span id="skill_cool_down"></span>
+        <div id="description_wrapper">
         </div>
     </div>
 </div>
@@ -60,11 +38,18 @@
 {% block local_js_footer %}
     <script>
 
-    $('#form_submit').click(function(e) {
+    function init(e){
+        e.preventDefault();
+        e.stopPropagation();
+        location.reload();
+    }
+
+    function search(e){
         e.stopPropagation();
         e.preventDefault();
         $.ajax({
-            url: '/wow_skills/get_wow_skill_info/',
+            // url: '/wow_skills/get_wow_skill_info/',
+            url: '/wow_skills/get_wow_skill_info_from_blizzard/',
             data: $('#form_get_wow_skill_info').serialize(),
             dataType: 'json',
             type: 'GET',
@@ -83,20 +68,23 @@
 
             success: function (data) {
                 console.log(data);
-                console.log(data.powerCost);
-                $('#skill_id').text(data.id);
-                $('#skill_name').text(data.name);
-                $('#skill_icon').text(data.icon);
-                $('#skill_description').text(data.description);
-                $('#skill_cast_time').text(data.castTime);
-                $('#skill_power_cost').text(data.powerCost);
-                $('#skill_range').text(data.range);
-                $('#skill_cool_down').text(data.cooldown);
-                $('#skill_icon_img').attr('src', 'https://wow.zamimg.com/images/wow/icons/large/'+data.icon+'.jpg');
                 if(Object.keys(data).length == 0){
                     $('#skill_icon_img').attr('src', '');
                     alert('blizzard api에 없는 skill 입니다.');
+                    return;
                 }
+                
+                // $('#skill_id').text(data.id);
+                // $('#skill_name').text(data.name);
+                // $('#skill_icon').text(data.icon);
+                // $('#skill_description').text(data.description);
+                // $('#skill_cast_time').text(data.castTime);
+                // $('#skill_power_cost').text(data.powerCost);
+                // $('#skill_range').text(data.range);
+                // $('#skill_cool_down').text(data.cooldown);
+                $('#skill_icon_img').attr('src', 'https://wow.zamimg.com/images/wow/icons/large/'+data.icon+'.jpg');
+                let html = dom_description(data);
+                $('#description_wrapper').html(html);
             },
 
             complete: function () {
@@ -105,7 +93,37 @@
             error: function () {
             }
         });
-    });
+    }
+
+    function dom_description(data){
+
+        let skill_id = data.id;
+        let skill_name = data.name;
+        let skill_cost = data.powerCost;
+        let skill_cast_time = data.castTime;
+        let skill_classes = data.classes;
+        let skill_specialize = data.specialize;
+        let skill_cool_down = data.cooldown;
+        let skill_range = data.range;
+        let skill_description = data.description;
+
+        let html = 
+                    `<div style="width:100%;max-width:300px;padding:10px;border-radius:5px;border:1px solid #f5f2f3;background-color:#161721d9;color:#ffffff;font-weight:500;font-size:14px;box-sizing:border-box">
+                        <div>${skill_name}</div>
+                        <div style="display:flex;margin-top:3px;">
+                            ${skill_cost == undefined ? "" : '<div style="flex:1 1 0">'+skill_cost+'</div>'}
+                            ${skill_range == undefined ? "" : '<div style="flex:1 1 0">'+skill_range+'</div>'}
+                        </div>
+                        <div style="display:flex;margin-top:3px;">
+                            ${skill_cast_time == undefined ? "" : '<div style="flex:1 1 0">'+skill_cast_time+'</div>'}
+                            ${skill_cool_down == undefined ? "" : '<div style="flex:1 1 0">'+skill_cool_down+'</div>'}
+                        </div>
+                        <div style="margin-top:10px;color:#edb31c;">
+                            ${skill_description == undefined ? "" : skill_description}
+                        </div>
+                    </div>`;
+        return html;
+    }
 
     </script>
 {% endblock %}
