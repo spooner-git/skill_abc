@@ -28,9 +28,12 @@ input, textarea{
     background-color: var(--bg-article);
     color: var(--font-main);
     padding: 5px 10px;
+    font-size: 14px;
+    font-weight: bold;  
 }
 textarea{
     resize: none;
+    line-height: 20px;
 }
 button{
     -webkit-appearance: none;
@@ -38,6 +41,12 @@ button{
     background-color: var(--bg-main);
     color: var(--font-main);
     border-radius: 3px;
+}
+
+select{
+    height: 35px;
+    line-height: 35px;
+    vertical-align: middle;
 }
 
 

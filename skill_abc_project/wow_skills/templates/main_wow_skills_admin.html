@@ -12,8 +12,8 @@
             <input type="text" name="skill_id" style="width:100%;height:100%;box-sizing: border-box;font-size:18px;font-weight:500">
         </div>
         <div style="flex-basis:110px;height:100%;text-align:right;">
-            <button id="get_wow_skill_form_submit" style="height:100%;">검색</button>
-            <button style="height:100%;">초기화</button>
+            <button style="height:100%;" onclick="search_admin(event);">검색</button>
+            <button style="height:100%;" onclick="init_admin(event)">초기화</button>
         </div>
     </form>
 </div>
@@ -25,6 +25,16 @@
             <!--<img src="https://wow.zamimg.com/images/wow/icons/large/spell_shadow_ritualofsacrifice.jpg" alt="" style="vertical-align: middle;">
             <span style="vertical-align: middle;">사악한 일격</span>-->
             <div class="skill_info_row">
+                <input type="text" name="classes" id="classes" hidden>
+                <input type="text" name="specialize" id="specialize" hidden>
+                <select onchange="fill_jobs_admin(this);" id="info_jobs" style="">
+
+                </select>
+                <select onchange="fill_specialize_admin(this);" id="info_specialize">
+                    
+                </select>
+            </div>
+            <div class="skill_info_row">
                 <div class="skill_info_title">아이콘</div>
                 <div id="skill_icon_wrapper">
                     <img src="" id="skill_icon_img_small">
@@ -34,35 +44,35 @@
             </div>
             <div class="skill_info_row">
                 <div class="skill_info_title">ID</div>
-                <div class="skill_info_content"><input type="text" name="cool_down" id="skill_id" disabled="true"></div>
+                <div class="skill_info_content"><input type="text" name="skill_id" id="skill_id" disabled="true"></div>
             </div>
             <div class="skill_info_row">
                 <div class="skill_info_title">스킬명</div>
-                <div class="skill_info_content"><input type="text" name="cool_down" id="skill_name" disabled="true"></div>
+                <div class="skill_info_content"><input type="text" name="skill_name" id="skill_name" disabled="true"></div>
             </div>
             <div class="skill_info_row">
                 <div class="skill_info_title">아이콘</div>
-                <div class="skill_info_content"><input type="text" name="cool_down" id="skill_icon" disabled="true"></div>
+                <div class="skill_info_content"><input type="text" name="skill_icon" id="skill_icon" disabled="true"></div>
             </div>
             <div class="skill_info_row">
                 <div class="skill_info_title">설명</div>
-                <div class="skill_info_content"><textarea type="text" name="cool_down" id="skill_description" disabled="true"></textarea></div>
+                <div class="skill_info_content"><textarea type="text" name="skill_description" id="skill_description" disabled="true"></textarea></div>
             </div>
             <div class="skill_info_row">
                 <div class="skill_info_title">시전시간</div>
-                <div class="skill_info_content"><input type="text" name="cool_down" id="skill_cast_time" disabled="true"></div>
+                <div class="skill_info_content"><input type="text" name="skill_cast_time" id="skill_cast_time" disabled="true"></div>
             </div>
             <div class="skill_info_row">
                 <div class="skill_info_title">마나/기력/분노..</div>
-                <div class="skill_info_content"><input type="text" name="cool_down" id="skill_power_cost" disabled="true"></div>
+                <div class="skill_info_content"><input type="text" name="skill_power_cost" id="skill_power_cost" disabled="true"></div>
             </div>
             <div class="skill_info_row">
                 <div class="skill_info_title">사정거리</div>
-                <div class="skill_info_content"><input type="text" name="cool_down" id="skill_range" disabled="true"></div>
+                <div class="skill_info_content"><input type="text" name="skill_range" id="skill_range" disabled="true"></div>
             </div>
             <div class="skill_info_row">
                 <div class="skill_info_title">쿨다운</div>
-                <div class="skill_info_content"><input type="text" name="cool_down" id="skill_cool_down" disabled="true"></div>
+                <div class="skill_info_content"><input type="text" name="skill_cool_down" id="skill_cool_down" disabled="true"></div>
             </div>
             <button id="add_wow_skill_form_submit">등록</button>
         </form>
@@ -73,7 +83,14 @@
 {% block local_js_footer %}
     <script>
 
-    $('#get_wow_skill_form_submit').click(function(e) {
+
+    function init_admin(e){
+        e.preventDefault();
+        e.stopPropagation();
+        location.reload();
+    }
+
+    function search_admin(e){
         e.stopPropagation();
         e.preventDefault();
         $.ajax({
@@ -113,6 +130,15 @@
                 $('#skill_icon_img_small').attr({'src': 'https://wow.zamimg.com/images/wow/icons/small/'+data.icon+'.jpg', "title":data.id});
                 $('#skill_icon_img_medium').attr({'src': 'https://wow.zamimg.com/images/wow/icons/medium/'+data.icon+'.jpg', "title":data.id});
                 $('#skill_icon_img_large').attr({'src': 'https://wow.zamimg.com/images/wow/icons/large/'+data.icon+'.jpg', "title":data.id});
+
+
+                let jobs = ['<option value="none" disabled selected>클래스 선택</option>'];
+                for(let item in wow_classes_tree["kr"]){
+                    jobs.push(
+                            `<option value="${item}">${item}</div>`
+                        );
+                }
+                $('#info_jobs').html(jobs.join(""));
                 
             },
 
@@ -122,7 +148,24 @@
             error: function () {
             }
         });
-    });
+    }
+
+    function fill_jobs_admin(context){
+        let selected_job = $(context).val();
+        let specializes = ['<option value="none" disabled selected>전문화 선택</option>'];
+        for(let i=0; i<wow_classes_tree["kr"][selected_job].length; i++){
+            specializes.push(
+                `<option value="${wow_classes_tree["kr"][selected_job][i]}">${wow_classes_tree["kr"][selected_job][i]}</div>`
+            );
+        }
+        $('#info_specialize').html(specializes.join(""));
+        $('#classes').val(selected_job);
+    }
+
+    function fill_specialize_admin(context){
+        let selected_specialize = $(context).val();
+        $('#specialize').val(selected_specialize);
+    }
 
     </script>
 {% endblock %}
