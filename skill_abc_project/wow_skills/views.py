@@ -68,7 +68,7 @@ class GetWowClassSpecializeDataView(View):
                      'wow_specialize_type_cd': [],
                      'wow_specialize_type_name': []
                      }
-            ordered_class_specialize_dict[wow_class_specialize_info.wow_class_tb.id]['wow_pecialize_type_id'].append(wow_class_specialize_info.id)
+            ordered_class_specialize_dict[wow_class_specialize_info.wow_class_tb.id]['wow_specialize_type_id'].append(wow_class_specialize_info.id)
             ordered_class_specialize_dict[wow_class_specialize_info.wow_class_tb.id]['wow_specialize_type_cd'].append(wow_class_specialize_info.specialize_type_cd)
             ordered_class_specialize_dict[wow_class_specialize_info.wow_class_tb.id]['wow_specialize_type_name'].append(wow_class_specialize_info.name)
 
@@ -108,29 +108,31 @@ def add_wow_skill_info_logic(request):
     skill_cast_time = request.POST.get('wow_skill_cast_time', '')
     skill_power_cost = request.POST.get('wow_skill_power_cost', '')
     skill_range = request.POST.get('wow_skill_range', '')
-    skill_cool_down = request.POST.get('wow_skill_cool_down', '')
-
+    skill_cool_down = request.POST.get('skill_cool_down', '')
+    wow_skill_icon_img_small = request.POST.get('wow_skill_icon_img_small', '')
+    wow_skill_icon_img_medium = request.POST.get('wow_skill_icon_img_medium', '')
+    wow_skill_icon_img_large = request.POST.get('wow_skill_icon_img_large', '')
     context = {}
 
     error = None
-    try:
-        with transaction.atomic():
-            wow_specialize_skill_info = WowSpecializeSkillTb(wow_class_tb_id=wow_class_id,
-                                                             wow_specialize_type_tb=specialize_type_id,
-                                                             skill_id=skill_id, name=skill_name, icon=skill_icon,
-                                                             description=skill_description, range=skill_range,
-                                                             power_cost=skill_power_cost, cast_time=skill_cast_time,
-                                                             cool_down=skill_cool_down, main_img_url='', sub_img_url='')
-            wow_specialize_skill_info.save()
-    except ValueError:
-        error = '오류가 발생했습니다. [1]'
-    except IntegrityError:
-        error = '오류가 발생했습니다. [2]'
-    except TypeError:
-        error = '오류가 발생했습니다. [3]'
-    except ValidationError:
-        error = '오류가 발생했습니다. [4]'
-    if error is not None:
-        context['error'] = str(error)
+    # try:
+    #     with transaction.atomic():
+    #         wow_specialize_skill_info = WowSpecializeSkillTb(wow_class_tb_id=wow_class_id,
+    #                                                          wow_specialize_type_tb=specialize_type_id,
+    #                                                          skill_id=skill_id, name=skill_name, icon=skill_icon,
+    #                                                          description=skill_description, range=skill_range,
+    #                                                          power_cost=skill_power_cost, cast_time=skill_cast_time,
+    #                                                          cool_down=skill_cool_down, main_img_url='', sub_img_url='')
+    #         wow_specialize_skill_info.save()
+    # except ValueError:
+    #     error = '오류가 발생했습니다. [1]'
+    # except IntegrityError:
+    #     error = '오류가 발생했습니다. [2]'
+    # except TypeError:
+    #     error = '오류가 발생했습니다. [3]'
+    # except ValidationError:
+    #     error = '오류가 발생했습니다. [4]'
+    # if error is not None:
+    #     context['error'] = str(error)
 
     return JsonResponse(context, json_dumps_params={'ensure_ascii': True})
