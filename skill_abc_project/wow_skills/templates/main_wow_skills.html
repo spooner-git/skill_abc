@@ -112,11 +112,11 @@
                         <div>${skill_name}</div>
                         <div style="display:flex;margin-top:3px;">
                             ${skill_cost == undefined ? "" : '<div style="flex:1 1 0">'+skill_cost+'</div>'}
-                            ${skill_range == undefined ? "" : '<div style="flex:1 1 0">'+skill_range+'</div>'}
+                            ${skill_range == undefined ? "" : '<div style="flex:1 1 0;text-align:right;">'+skill_range+'</div>'}
                         </div>
                         <div style="display:flex;margin-top:3px;">
                             ${skill_cast_time == undefined ? "" : '<div style="flex:1 1 0">'+skill_cast_time+'</div>'}
-                            ${skill_cool_down == undefined ? "" : '<div style="flex:1 1 0">'+skill_cool_down+'</div>'}
+                            ${skill_cool_down == undefined ? "" : '<div style="flex:1 1 0;text-align:right;">'+skill_cool_down+'</div>'}
                         </div>
                         <div style="margin-top:10px;color:#edb31c;">
                             ${skill_description == undefined ? "" : skill_description}
