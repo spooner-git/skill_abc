@@ -41,7 +41,9 @@
             <div class="skill_info_row">
                 <div class="skill_info_title">아이콘</div>
                 <div id="skill_icon_wrapper">
-                    <input type="file" name="wow_skill_icon_img_small">
+                    <input type="file" name="wow_skill_icon_img_small" hidden>
+                    <input type="file" name="wow_skill_icon_img_medium" hidden>
+                    <input type="file" name="wow_skill_icon_img_large" hidden>
                     <img src="" name="wow_skill_icon_img_small" id="wow_skill_icon_img_small">
                     <img src="" name="wow_skill_icon_img_medium" id="wow_skill_icon_img_medium">
                     <img src="" name="wow_skill_icon_img_large" id="wow_skill_icon_img_large">
@@ -168,7 +170,6 @@
                 $('#wow_skill_icon_img_small').attr({'src': 'https://wow.zamimg.com/images/wow/icons/small/'+data.icon+'.jpg', "title":data.id});
                 $('#wow_skill_icon_img_medium').attr({'src': 'https://wow.zamimg.com/images/wow/icons/medium/'+data.icon+'.jpg', "title":data.id});
                 $('#wow_skill_icon_img_large').attr({'src': 'https://wow.zamimg.com/images/wow/icons/large/'+data.icon+'.jpg', "title":data.id});
-
             },
 
             complete: function () {
