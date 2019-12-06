@@ -24,7 +24,7 @@
 
 <div id="result_display_wrap" style="margin-top: 50px;">
     <div class="result_row">
-        <form action="{% url 'wow_skills:add_wow_skill_info' %}" name="get_wow_skill_info" id="form_room" method="post" enctype="multipart/form-data">
+        <form action="{% url 'wow_skills:add_wow_skill_info' %}" name="get_wow_skill_info" id="form_wow_skill_info" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <!--<img src="https://wow.zamimg.com/images/wow/icons/large/spell_shadow_ritualofsacrifice.jpg" alt="" style="vertical-align: middle;">
             <span style="vertical-align: middle;">사악한 일격</span>-->
@@ -79,7 +79,7 @@
                 <div class="skill_info_title">쿨다운</div>
                 <div class="skill_info_content"><input type="text" name="wow_skill_cool_down" id="wow_skill_cool_down" disabled="true"></div>
             </div>
-            <button id="add_wow_skill_form_submit">등록</button>
+            <button id="add_wow_skill_form_submit" onclick="add_wow_skill_info(event);">등록</button>
         </form>
     </div>
 </div>
@@ -179,6 +179,32 @@
         });
     }
 
+    function add_wow_skill_info(e){
+        e.stopPropagation();
+        e.preventDefault(getBase64Image(img));
+        console.log(getBase64Image($('#wow_skill_icon_img_small').val()));
+
+{#        $.ajax({#}
+{#            url: '/wow_skills/add_wow_skill_info/',#}
+{#            data: $('#form_wow_skill_info').serialize(),#}
+{#            dataType: 'json',#}
+{#            type: 'GET',#}
+{##}
+{#            beforeSend: function () {#}
+{#            },#}
+{##}
+{#            success: function (data) {#}
+{#                #}
+{#            },#}
+{##}
+{#            complete: function () {#}
+{#            },#}
+{##}
+{#            error: function () {#}
+{#            }#}
+{#        });#}
+    }
+
     function fill_class_admin(context){
         let selected_class = $(context).val();
         let specializes = ['<option value="none" disabled selected>전문화 선택</option>'];
@@ -194,6 +220,15 @@
     function fill_specialize_admin(context){
         let selected_specialize = $(context).val();
         $('#wow_specialize').val(selected_specialize);
+    }
+    function getBase64Image(img) {
+          var canvas = document.createElement("canvas");
+          canvas.width = img.width;
+          canvas.height = img.height;
+          var ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0);
+          var dataURL = canvas.toDataURL("image/png");
+          return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
     }
 
     </script>
