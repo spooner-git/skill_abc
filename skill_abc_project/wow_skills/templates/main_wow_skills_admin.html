@@ -29,8 +29,8 @@
             <!--<img src="https://wow.zamimg.com/images/wow/icons/large/spell_shadow_ritualofsacrifice.jpg" alt="" style="vertical-align: middle;">
             <span style="vertical-align: middle;">사악한 일격</span>-->
             <div class="skill_info_row">
-                <input type="text" name="wow_class" id="wow_class" hidden>
-                <input type="text" name="wow_specialize" id="specialize" hidden>
+                <input type="text" name="wow_class_id" id="wow_class" hidden>
+                <input type="text" name="wow_specialize_id" id="specialize" hidden>
                 <select onchange="fill_class_admin(this);" id="info_wow_class" style="">
 
                 </select>
@@ -186,10 +186,6 @@
     function add_wow_skill_info(e){
         e.stopPropagation();
         e.preventDefault();
-        alert('test3');
-{#        console.log(document.getElementById("wow_skill_icon_img_medium"));#}
-{#        console.log(getBase64Image(document.getElementById("wow_skill_icon_img_medium")));#}
-        alert('test4');
         $.ajax({
             url: '/wow_skills/add_wow_skill_info/',
             data: $('#form_wow_skill_info').serialize(),
@@ -226,30 +222,6 @@
     function fill_specialize_admin(context){
         let selected_specialize = $(context).val();
         $('#wow_specialize').val(selected_specialize);
-    }
-    function getBase64Image(img) {
-            img.crossOrigin = '*';
-          var canvas = document.createElement("canvas");
-          canvas.width = img.width;
-          canvas.height = img.height;
-          var ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0);
-          var dataURL = canvas.toDataURL("image/png");
-          return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-    }
-    function toDataUrl(url, callback) {
-        var xhr = new XMLHttpRequest();
-{#        xhr.dataType = 'jsonp';#}
-        xhr.onload = function() {
-            var reader = new FileReader();
-            reader.onloadend = function() {
-                callback(reader.result);
-            }
-            reader.readAsDataURL(xhr.response);
-        };
-        xhr.open('GET', url);
-        xhr.responseType = 'blob';
-        xhr.send();
     }
 
     </script>

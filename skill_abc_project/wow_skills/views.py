@@ -8,6 +8,7 @@ from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db import IntegrityError
 from django.db import transaction
 from django.http import JsonResponse
+from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import TemplateView
 
@@ -114,7 +115,7 @@ class GetWowSkillInfoFromBlizzardView(View):
 
 def add_wow_skill_info_logic(request):
     wow_class_id = request.POST.get('wow_class_id', '')
-    specialize_type_id = request.POST.get('wow_specialize_type_id', '')
+    wow_specialize_id = request.POST.get('wow_specialize_id', '')
     skill_id = request.POST.get('wow_skill_id', '')
     skill_name = request.POST.get('wow_skill_name', '')
     skill_icon = request.POST.get('wow_skill_icon', '')
@@ -137,14 +138,14 @@ def add_wow_skill_info_logic(request):
 
     if wow_class_id is None or wow_class_id == '':
         wow_class_id = ''
-    if specialize_type_id is None or specialize_type_id == '':
-        specialize_type_id = ''
+    if wow_specialize_id is None or wow_specialize_id == '':
+        wow_specialize_id = ''
 
     try:
         try:
             wow_specialize_skill_info = WowSpecializeSkillTb.objects.get(skill_id=skill_id)
             wow_specialize_skill_info.wow_class_tb_id = wow_class_id
-            wow_specialize_skill_info.wow_specialize_type_tb_id = specialize_type_id
+            wow_specialize_skill_info.wow_specialize_type_tb_id = wow_specialize_id
             wow_specialize_skill_info.skill_id = skill_id
             wow_specialize_skill_info.name = skill_name
             wow_specialize_skill_info.icon = skill_icon
@@ -158,7 +159,7 @@ def add_wow_skill_info_logic(request):
             wow_specialize_skill_info.large_img_url = large_img_url
         except ObjectDoesNotExist:
             wow_specialize_skill_info = WowSpecializeSkillTb(wow_class_tb_id=wow_class_id,
-                                                             wow_specialize_type_tb_id=specialize_type_id,
+                                                             wow_specialize_type_tb_id=wow_specialize_id,
                                                              skill_id=skill_id, name=skill_name, icon=skill_icon,
                                                              description=skill_description, range=skill_range,
                                                              power_cost=skill_power_cost, cast_time=skill_cast_time,
@@ -177,5 +178,5 @@ def add_wow_skill_info_logic(request):
         error = '오류가 발생했습니다. [4]'
     if error is not None:
         context['error'] = str(error)
-
-    return JsonResponse(context, json_dumps_params={'ensure_ascii': True})
+    return redirect('/wow-skill/')
+    # return JsonResponse(context, json_dumps_params={'ensure_ascii': True})
