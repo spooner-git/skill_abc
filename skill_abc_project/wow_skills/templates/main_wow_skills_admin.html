@@ -24,7 +24,7 @@
 
 <div id="result_display_wrap" style="margin-top: 50px;">
     <div class="result_row">
-        <form action="{% url 'wow_skills:add_wow_skill_info' %}" name="get_wow_skill_info" id="form_wow_skill_info" method="post" enctype="multipart/form-data">
+        <form action="{% url 'wow_skills:add_wow_skill_info' %}" name="add_wow_skill_info" id="form_wow_skill_info" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <!--<img src="https://wow.zamimg.com/images/wow/icons/large/spell_shadow_ritualofsacrifice.jpg" alt="" style="vertical-align: middle;">
             <span style="vertical-align: middle;">사악한 일격</span>-->
@@ -41,9 +41,9 @@
             <div class="skill_info_row">
                 <div class="skill_info_title">아이콘</div>
                 <div id="skill_icon_wrapper">
-                    <input type="file" name="wow_skill_icon_img_small" hidden>
-                    <input type="file" name="wow_skill_icon_img_medium" hidden>
-                    <input type="file" name="wow_skill_icon_img_large" hidden>
+                    <input type="hidden" name="wow_skill_icon_img_small_url" id="wow_skill_icon_img_small_url" >
+                    <input type="hidden" name="wow_skill_icon_img_medium_url" id="wow_skill_icon_img_medium_url" >
+                    <input type="hidden" name="wow_skill_icon_img_large_url" id="wow_skill_icon_img_large_url" >
                     <img src="" name="wow_skill_icon_img_small" id="wow_skill_icon_img_small">
                     <img src="" name="wow_skill_icon_img_medium" id="wow_skill_icon_img_medium">
                     <img src="" name="wow_skill_icon_img_large" id="wow_skill_icon_img_large">
@@ -81,7 +81,7 @@
                 <div class="skill_info_title">쿨다운</div>
                 <div class="skill_info_content"><input type="text" name="wow_skill_cool_down" id="wow_skill_cool_down" disabled="true"></div>
             </div>
-            <button id="add_wow_skill_form_submit" onclick="add_wow_skill_info(event);">등록</button>
+            <button style="height:100%;" onclick="add_wow_skill_info(event);">등록</button>
         </form>
     </div>
 </div>
@@ -170,6 +170,9 @@
                 $('#wow_skill_icon_img_small').attr({'src': 'https://wow.zamimg.com/images/wow/icons/small/'+data.icon+'.jpg', "title":data.id});
                 $('#wow_skill_icon_img_medium').attr({'src': 'https://wow.zamimg.com/images/wow/icons/medium/'+data.icon+'.jpg', "title":data.id});
                 $('#wow_skill_icon_img_large').attr({'src': 'https://wow.zamimg.com/images/wow/icons/large/'+data.icon+'.jpg', "title":data.id});
+                $('#wow_skill_icon_img_small_url').val('https://wow.zamimg.com/images/wow/icons/small/'+data.icon+'.jpg');
+                $('#wow_skill_icon_img_medium_url').val('https://wow.zamimg.com/images/wow/icons/medium/'+data.icon+'.jpg');
+                $('#wow_skill_icon_img_large_url').val('https://wow.zamimg.com/images/wow/icons/large/'+data.icon+'.jpg');
             },
 
             complete: function () {
@@ -182,28 +185,30 @@
 
     function add_wow_skill_info(e){
         e.stopPropagation();
-        e.preventDefault(getBase64Image(img));
-        console.log(getBase64Image($('#wow_skill_icon_img_small').val()));
+        e.preventDefault();
+        alert('test3');
+{#        console.log(document.getElementById("wow_skill_icon_img_medium"));#}
+{#        console.log(getBase64Image(document.getElementById("wow_skill_icon_img_medium")));#}
+        alert('test4');
+        $.ajax({
+            url: '/wow_skills/add_wow_skill_info/',
+            data: $('#form_wow_skill_info').serialize(),
+            dataType: 'json',
+            type: 'GET',
 
-{#        $.ajax({#}
-{#            url: '/wow_skills/add_wow_skill_info/',#}
-{#            data: $('#form_wow_skill_info').serialize(),#}
-{#            dataType: 'json',#}
-{#            type: 'GET',#}
-{##}
-{#            beforeSend: function () {#}
-{#            },#}
-{##}
-{#            success: function (data) {#}
-{#                #}
-{#            },#}
-{##}
-{#            complete: function () {#}
-{#            },#}
-{##}
-{#            error: function () {#}
-{#            }#}
-{#        });#}
+            beforeSend: function () {
+            },
+
+            success: function (data) {
+
+            },
+
+            complete: function () {
+            },
+
+            error: function () {
+            }
+        });
     }
 
     function fill_class_admin(context){
@@ -223,6 +228,7 @@
         $('#wow_specialize').val(selected_specialize);
     }
     function getBase64Image(img) {
+            img.crossOrigin = '*';
           var canvas = document.createElement("canvas");
           canvas.width = img.width;
           canvas.height = img.height;
@@ -230,6 +236,20 @@
           ctx.drawImage(img, 0, 0);
           var dataURL = canvas.toDataURL("image/png");
           return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+    }
+    function toDataUrl(url, callback) {
+        var xhr = new XMLHttpRequest();
+{#        xhr.dataType = 'jsonp';#}
+        xhr.onload = function() {
+            var reader = new FileReader();
+            reader.onloadend = function() {
+                callback(reader.result);
+            }
+            reader.readAsDataURL(xhr.response);
+        };
+        xhr.open('GET', url);
+        xhr.responseType = 'blob';
+        xhr.send();
     }
 
     </script>

@@ -28,7 +28,9 @@
         <!--<img src="https://wow.zamimg.com/images/wow/icons/large/spell_shadow_ritualofsacrifice.jpg" alt="" style="vertical-align: middle;">
         <span style="vertical-align: middle;">사악한 일격</span>-->
         <div>
-            <img src="" id="skill_icon_img">
+            <img src="" id="skill_small_img">
+            <img src="" id="skill_medium_img">
+            <img src="" id="skill_large_img">
         </div>
         <div id="description_wrapper" style="display: inline-block;">
         </div>
@@ -51,7 +53,7 @@
         e.stopPropagation();
         e.preventDefault();
         $.ajax({
-{#            // url: '/wow_skills/get_wow_skill_info/',#}
+            url: '/wow_skills/get_wow_skill_info/',
 {#            url: '/wow_skills/get_wow_skill_info_from_blizzard/',#}
             data: $('#form_get_wow_skill_info').serialize(),
             dataType: 'json',
@@ -66,28 +68,26 @@
                 $('#skill_power_cost').text('');
                 $('#skill_range').text('');
                 $('#skill_cool_down').text('');
-                $('#skill_icon_img').attr('src', '');
+                $('#skill_small_img').attr('src', '');
+                $('#skill_medium_img').attr('src', '');
+                $('#skill_large_img').attr('src', '');
             },
 
             success: function (data) {
-                console.log(data);
                 if(Object.keys(data).length == 0){
                     $('#skill_icon_img').attr('src', '');
                     alert('blizzard api에 없는 skill 입니다.');
                     return;
                 }
-                
-                $('#skill_icon_img').attr('src', 'https://wow.zamimg.com/images/wow/icons/large/'+data.icon+'.jpg');
-                let html = dom_description(data);
+                let html = '';
+                let wow_skill_data = data.wow_skill;
+                for(let i=0; i<wow_skill_data.length; i++){
+                    $('#skill_small_img').attr('src', wow_skill_data[i].wow_small_img_url);
+                    $('#skill_medium_img').attr('src', wow_skill_data[i].wow_medium_img_url);
+                    $('#skill_large_img').attr('src', wow_skill_data[i].wow_large_img_url);
+                    html += dom_description(wow_skill_data[i]);
+                }
                 $('#description_wrapper').html(html);
-
-                setTimeout(()=>{
-                    html2canvas(document.querySelector("#description_wrapper")).then(canvas => { 
-                        
-                        let image_src = canvas.toDataURL("image/jpeg");
-                        document.querySelector('#description_wrapper_img').innerHTML = `<div>Image File</div><img src="${image_src}">`;
-                    });  
-                }, 1000);
             },
 
             complete: function () {
@@ -100,15 +100,15 @@
 
     function dom_description(data){
 
-        let skill_id = data.id;
-        let skill_name = data.name;
-        let skill_cost = data.powerCost;
-        let skill_cast_time = data.castTime;
-        let skill_classes = data.classes;
-        let skill_specialize = data.specialize;
-        let skill_cool_down = data.cooldown;
-        let skill_range = data.range;
-        let skill_description = data.description;
+        let skill_id = data.wow_skill_id;
+        let skill_name = data.wow_skill_name;
+        let skill_cost = data.wow_power_cost;
+        let skill_cast_time = data.wow_cast_time;
+        let skill_class_name = data.wow_class_name;
+        let skill_specialize = data.wow_specialize_name;
+        let skill_cool_down = data.wow_cool_down;
+        let skill_range = data.wow_range;
+        let skill_description = data.wow_description;
 
         let html = 
                     `

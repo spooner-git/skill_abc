@@ -36,8 +36,10 @@ class WowSpecializeTypeTb(TimeStampedModel):
 
 class WowSpecializeSkillTb(TimeStampedModel):
     id = models.BigAutoField(db_column='id', primary_key=True, max_length=20, null=False)
-    wow_class_tb = models.ForeignKey(WowClassTb, on_delete=models.CASCADE, default='')
-    wow_specialize_type_tb = models.ForeignKey(WowSpecializeTypeTb, on_delete=models.CASCADE, default='')
+    wow_class_tb = models.ForeignKey(WowClassTb, on_delete=models.CASCADE,
+                                     blank=True, null=True, default='')
+    wow_specialize_type_tb = models.ForeignKey(WowSpecializeTypeTb, on_delete=models.CASCADE,
+                                               blank=True, null=True, default='')
     skill_id = models.CharField(db_column='skill_id', max_length=20, blank=True, default='')
     name = models.CharField(db_column='name', max_length=255, blank=True, default='')
     icon = models.CharField(db_column='icon', max_length=255, blank=True, default='')

@@ -72,12 +72,12 @@ def func_get_wow_skill_info(skill_id, access_token):
     return skill_info
 
 
-def func_upload_wow_skill_image_logic(file, skill_id, img_type):
+def func_upload_wow_skill_image_logic(file, skill_size, skill_id):
 
     # project_id = request.POST.get('project_id', '')
     # image = request.POST.get('upload_file', '')
     # context = {'error': None}
-    bucket_name = getattr(settings, "PTERS_AWS_S3_BUCKET_NAME", '')
+    bucket_name = getattr(settings, "SKILL_ABC_AWS_S3_BUCKET_NAME", '')
 
     s3 = boto3.resource('s3', aws_access_key_id=getattr(settings, "SKILL_ABC_AWS_ACCESS_KEY_ID", ''),
                         aws_secret_access_key=getattr(settings, "SKILL_ABC_AWS_SECRET_ACCESS_KEY", ''))
@@ -93,15 +93,11 @@ def func_upload_wow_skill_image_logic(file, skill_id, img_type):
         error_code = int(e.response['Error']['Code'])
         if error_code == 404:
             exists = False
-
     if exists is True:
-        image_format, image_str = file.split(';base64,')
-        ext = image_format.split('/')[-1]
-        data = ContentFile(base64.b64decode(image_str), name=skill_id+'.' + ext)
-        # content = file.read()
-        s3_img_url = 'wow-skill/'+img_type+'/'+skill_id+'.jpg'
-        bucket.put_object(Key=s3_img_url, Body=data, ContentType=ext, ACL='public-read')
-        img_url = 'https://skill-abc.s3.ap-northeast-2.amazonaws.com/'+s3_img_url
+        s3_img_url = 'wow-skill/'+str(skill_id)+'/'+skill_size+'.png'
+        bucket.put_object(Key=s3_img_url, Body=file, ContentType='image/png', ACL='public-read')
+        img_url = 'https://s3.ap-northeast-2.amazonaws.com/skill-abc/'+s3_img_url
+
     return img_url
 
 
@@ -110,7 +106,7 @@ def func_delete_wow_skill_image_logic(file_name):
     # project_id = request.POST.get('project_id', '')
     # image = request.POST.get('upload_file', '')
     # context = {'error': None}
-    bucket_name = getattr(settings, "PTERS_AWS_S3_BUCKET_NAME", '')
+    bucket_name = getattr(settings, "SKILL_ABC_AWS_S3_BUCKET_NAME", '')
     s3 = boto3.resource('s3', aws_access_key_id=getattr(settings, "SKILL_ABC_AWS_ACCESS_KEY_ID", ''),
                         aws_secret_access_key=getattr(settings, "SKILL_ABC_AWS_SECRET_ACCESS_KEY", ''))
     bucket = s3.Bucket(bucket_name)
@@ -130,9 +126,9 @@ def func_delete_wow_skill_image_logic(file_name):
         # image_format, image_str = content.split(';base64,')
         # ext = image_format.split('/')[-1]
         # data = ContentFile(base64.b64decode(image_str), name='temp.' + ext)
-        file_name_split = file_name.split('https://skill-abc.s3.ap-northeast-2.amazonaws.com/')
+        file_name_split = file_name.split('https://s3.ap-northeast-2.amazonaws.com/skill-abc/')
         if len(file_name_split) >= 2:
-            s3_img_url = file_name.split('https://skill-abc.s3.ap-northeast-2.amazonaws.com/')[1]
+            s3_img_url = file_name.split('https://s3.ap-northeast-2.amazonaws.com/skill-abc/')[1]
             objects_to_delete = [{'Key': s3_img_url}]
             try:
                 bucket.delete_objects(
