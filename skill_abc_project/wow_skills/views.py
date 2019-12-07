@@ -178,5 +178,5 @@ def add_wow_skill_info_logic(request):
         error = '오류가 발생했습니다. [4]'
     if error is not None:
         context['error'] = str(error)
-    return redirect('/wow-skill/')
+    return redirect('/wow_skills/')
     # return JsonResponse(context, json_dumps_params={'ensure_ascii': True})
