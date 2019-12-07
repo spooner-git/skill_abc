@@ -1,12 +1,9 @@
 # Create your views here.
-import base64
 import collections
-from io import BytesIO
 
 import requests
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db import IntegrityError
-from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.views import View
@@ -14,7 +11,7 @@ from django.views.generic import TemplateView
 
 from configs.const import USE
 from wow_skills.functions import func_get_blizzard_token, func_get_wow_skill_info, func_upload_wow_skill_image_logic
-from wow_skills.models import WowClassTb, WowSpecializeTypeTb, WowSpecializeSkillTb
+from wow_skills.models import WowSpecializeTypeTb, WowSpecializeSkillTb
 
 
 class IndexView(TemplateView):
@@ -95,7 +92,6 @@ class AdminView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(AdminView, self).get_context_data(**kwargs)
-        # job_data = WowJobTb.objects.filter(use=USE).order_by('order')
         return context
 
 
@@ -107,8 +103,6 @@ class GetWowSkillInfoFromBlizzardView(View):
         skill_info = {}
         if access_token['error_message'] is None:
             skill_info = func_get_wow_skill_info(skill_id, access_token['access_token'])
-        # else:
-        #     skill_info['error'] = access_token['error_message']
 
         return JsonResponse(skill_info, json_dumps_params={'ensure_ascii': True})
 
@@ -177,5 +171,6 @@ def add_wow_skill_info_logic(request):
         error = '오류가 발생했습니다. [4]'
     if error is not None:
         context['error'] = str(error)
+
     return redirect('/wow_skills/')
     # return JsonResponse(context, json_dumps_params={'ensure_ascii': True})

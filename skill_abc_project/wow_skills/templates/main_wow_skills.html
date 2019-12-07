@@ -25,8 +25,6 @@
 
 <div id="result_display_wrap" style="margin-top: 50px;">
     <div class="result_row">
-        <!--<img src="https://wow.zamimg.com/images/wow/icons/large/spell_shadow_ritualofsacrifice.jpg" alt="" style="vertical-align: middle;">
-        <span style="vertical-align: middle;">사악한 일격</span>-->
         <div>
             <img src="" id="skill_small_img">
             <img src="" id="skill_medium_img">
@@ -54,7 +52,6 @@
         e.preventDefault();
         $.ajax({
             url: '/wow_skills/get_wow_skill_info/',
-{#            url: '/wow_skills/get_wow_skill_info_from_blizzard/',#}
             data: $('#form_get_wow_skill_info').serialize(),
             dataType: 'json',
             type: 'GET',
