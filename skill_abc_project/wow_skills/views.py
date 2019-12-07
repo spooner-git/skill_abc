@@ -140,7 +140,6 @@ def add_wow_skill_info_logic(request):
         wow_class_id = ''
     if wow_specialize_id is None or wow_specialize_id == '':
         wow_specialize_id = ''
-
     try:
         try:
             wow_specialize_skill_info = WowSpecializeSkillTb.objects.get(skill_id=skill_id)
