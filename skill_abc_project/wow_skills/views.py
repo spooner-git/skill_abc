@@ -117,7 +117,7 @@ def add_wow_skill_info_logic(request):
     skill_cast_time = request.POST.get('wow_skill_cast_time', '')
     skill_power_cost = request.POST.get('wow_skill_power_cost', '')
     skill_range = request.POST.get('wow_skill_range', '')
-    skill_cool_down = request.POST.get('skill_cool_down', '')
+    skill_cool_down = request.POST.get('wow_skill_cool_down', '')
     wow_skill_icon_img_small_url = request.POST.get('wow_skill_icon_img_small_url', '')
     wow_skill_icon_img_medium_url = request.POST.get('wow_skill_icon_img_medium_url', '')
     wow_skill_icon_img_large_url = request.POST.get('wow_skill_icon_img_large_url', '')
