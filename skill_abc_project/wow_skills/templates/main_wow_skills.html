@@ -107,7 +107,7 @@
                 let length = wow_skill_data.length;
 
                 if(length == 0){
-                    alert("데이터가 없습니다.");
+                    $('#result_display_wrap .result_row').html(`<div style="font-size:13px;font-weight:500;">데이터가 없습니다.</div>`);
                     loading_image("OFF");
                 }
 
