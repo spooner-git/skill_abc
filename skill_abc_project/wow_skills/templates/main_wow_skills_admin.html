@@ -193,6 +193,7 @@
         }
         
         $('#wow_skill_description').val( $('#wow_skill_description').val().replace(/\n/gi, "<br>") );
+        console.log($('#form_wow_skill_info').serialize())
         $.ajax({
             url: '/wow_skills/add_wow_skill_info/',
             data: $('#form_wow_skill_info').serialize(),
