@@ -147,7 +147,10 @@
 
         let hover = `
                     <div id="skill_description_${skill_id}" class="skill_description_wrapper skill_description_wrapper_hover">
-                        <div>${skill_name}</div>
+                        <div style="display:flex;margin-top:3px;">
+                            <div style="flex:1 1 0">${skill_name}</div>
+                            <div style="flex:1 1 0;text-align:right;color:${class_color[skill_use_class]}">${skill_use_class}(${skill_use_specialize})</div>
+                        </div>
                         <div style="display:flex;margin-top:3px;">
                             ${skill_cost == undefined ? "" : '<div style="flex:1 1 0">'+skill_cost+'</div>'}
                             ${skill_range == undefined ? "" : '<div style="flex:1 1 0;text-align:right;">'+skill_range+'</div>'}
@@ -193,6 +196,8 @@
         let skill_cool_down = data.wow_cool_down;
         let skill_range = data.wow_range;
         let skill_description = data.wow_description;
+        let skill_use_class = data.wow_class_name;
+        let skill_use_specialize = data.wow_specialize_name;
 
         let images = `<div class="skill_images_wrapper">
                         <img src="${skill_image_small}" title="${skill_name}">
@@ -202,7 +207,10 @@
         let description = 
                     `
                     <div id="skill_description_${skill_id}" class="skill_description_wrapper">
-                        <div>${skill_name}</div>
+                        <div style="display:flex;margin-top:3px;">
+                            <div style="flex:1 1 0">${skill_name}</div>
+                            <div style="flex:1 1 0;text-align:right;color:${class_color[skill_use_class]}">${skill_use_class}(${skill_use_specialize})</div>
+                        </div>
                         <div style="display:flex;margin-top:3px;">
                             ${skill_cost == undefined ? "" : '<div style="flex:1 1 0">'+skill_cost+'</div>'}
                             ${skill_range == undefined ? "" : '<div style="flex:1 1 0;text-align:right;">'+skill_range+'</div>'}
