@@ -10,7 +10,7 @@ html{
 body{
     color: var(--font-main);
     background-color: var(--bg-main);
-    max-width: 600px;
+    max-width: 450px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -41,6 +41,12 @@ button{
     background-color: var(--bg-main);
     color: var(--font-main);
     border-radius: 3px;
+    cursor: pointer;
+}
+button:hover, button:active{
+    border-color: #fe4e65;
+    color: #fe4e65;
+    transition: 0.3s;
 }
 
 select{

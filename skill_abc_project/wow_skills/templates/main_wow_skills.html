@@ -7,6 +7,9 @@
     .skill_images_wrapper{
 
     }
+    .skill_images_wrapper > img{
+        cursor: grab;
+    }
     .skill_description_wrapper{
         width:100%;
         max-width:350px;
@@ -20,8 +23,18 @@
         box-sizing:border-box
     }
     .skill_description_image_extracted{
+        cursor: grab;
+    }
+    .skill_description_image_extracted{
         width: 100%;
         max-width: 350px;
+    }
+
+    .skill_description_wrapper_hover{
+        position:absolute;
+        bottom: 0;
+        right:40px;
+        z-index: 1000;
     }
 </style>
 {% endblock %}
@@ -83,6 +96,7 @@
             },
 
             success: function (data) {
+                console.log(data)
                 if(Object.keys(data).length == 0){
                     $('#skill_icon_img').attr('src', '');
                     alert('blizzard api에 없는 skill 입니다.');
@@ -90,9 +104,14 @@
                 }
                 let html = '';
                 let wow_skill_data = data.wow_skill;
+                let length = wow_skill_data.length;
 
-                for(let i=0; i<wow_skill_data.length; i++){
-                    html += dom_skill(wow_skill_data[i]);
+                if(length > 1){
+                    for(let i=0; i<wow_skill_data.length; i++){
+                        html += dom_skill_simple(wow_skill_data[i]);
+                    }
+                }else{
+                    html = dom_skill(wow_skill_data[0]);
                 }
 
                 $('#result_display_wrap .result_row').html(html);
@@ -105,6 +124,58 @@
             error: function () {
             }
         });
+    }
+
+    function dom_skill_simple(data){
+        let skill_image_medium = data.wow_medium_img_url;
+        let skill_id = data.wow_skill_id;
+        let skill_name = data.wow_skill_name;
+        let skill_cost = data.wow_power_cost;
+        let skill_cast_time = data.wow_cast_time;
+        let skill_class_name = data.wow_class_name;
+        let skill_specialize = data.wow_specialize_name;
+        let skill_cool_down = data.wow_cool_down;
+        let skill_range = data.wow_range;
+        let skill_description = data.wow_description;
+        let skill_use_class = data.wow_class_name;
+        let skill_use_specialize = data.wow_specialize_name;
+
+        let html = `<div id="skill_simple_${skill_id}" style="height:40px;font-size:14px;font-weight:500;position:relative">
+                        <img id="skill_simple_image_${skill_id}" src="${skill_image_medium}" style="vertical-align:middle;cursor:pointer;">
+                        <span style="vertical-align:middle">${skill_name} - ${skill_use_class}(${skill_use_specialize}) - id:${skill_id}</span>
+                    </div>`;
+
+        let hover = `
+                    <div id="skill_description_${skill_id}" class="skill_description_wrapper skill_description_wrapper_hover">
+                        <div>${skill_name}</div>
+                        <div style="display:flex;margin-top:3px;">
+                            ${skill_cost == undefined ? "" : '<div style="flex:1 1 0">'+skill_cost+'</div>'}
+                            ${skill_range == undefined ? "" : '<div style="flex:1 1 0;text-align:right;">'+skill_range+'</div>'}
+                        </div>
+                        <div style="display:flex;margin-top:3px;">
+                            ${skill_cast_time == undefined ? "" : '<div style="flex:1 1 0">'+skill_cast_time+'</div>'}
+                            ${skill_cool_down == undefined ? "" : '<div style="flex:1 1 0;text-align:right;">'+skill_cool_down+'</div>'}
+                        </div>
+                        <div style="margin-top:10px;color:#edb31c;">
+                            ${skill_description == undefined ? "" : skill_description}
+                        </div>
+                    </div>`;
+
+        $(document).off('mouseover', `#skill_simple_image_${skill_id}`).on('mouseover', `#skill_simple_image_${skill_id}`, function(e){
+            $('.skill_description_wrapper_hover').remove();
+            $(`#skill_simple_${skill_id}`).append(hover);
+        });
+
+        $(document).off('mouseout', `#skill_simple_image_${skill_id}`).on('mouseout', `#skill_simple_image_${skill_id}`, function(e){
+            $('.skill_description_wrapper_hover').remove();
+        });
+
+        $(document).off('click', `#skill_simple_image_${skill_id}`).on('click', `#skill_simple_image_${skill_id}`, function(e){
+            let html = dom_skill(data);
+            $('#result_display_wrap .result_row').html(html);
+        });
+
+        return html;
     }
 
     function dom_skill(data){
@@ -148,20 +219,20 @@
                     `<div id="skill_description_image_${skill_id}"></div>`;
 
         let extract_button = 
-                    `<button type="button" id="skill_description_to_image_${skill_id}">스킬 설명을 이미지 파일로</button>`;
+                    `<button type="button" id="skill_description_to_image_${skill_id}" style="height:35px;">스킬 설명을 이미지 파일로</button>`;
 
         let html = `<div id="skill_${skill_id}">` + images + description + extract_button + description_image +'</div>';
 
         $(document).off('click', `#skill_description_to_image_${skill_id}`).on('click', `#skill_description_to_image_${skill_id}`, ()=>{
             loading_image('ON');
+            var useHeight = $('body').prop('scrollHeight');
             html2canvas(document.querySelector(`#skill_description_${skill_id}`)).then(canvas => {                     
                 let image_src = canvas.toDataURL("image/jpeg");
                 document.querySelector(`#skill_description_image_${skill_id}`).innerHTML = `<img src="${image_src}" class="skill_description_image_extracted" title="${skill_name}">`;
                 loading_image('OFF');
+                $(`#skill_description_to_image_${skill_id}`).remove();
             }); 
         });
-           
-            
         return html;
     }
 

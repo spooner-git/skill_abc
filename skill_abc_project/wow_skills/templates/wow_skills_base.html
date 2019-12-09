@@ -17,6 +17,9 @@
     <link rel="stylesheet" href={% static_url "user/css/base.css" %}>
     <link rel="stylesheet" href={% static_url "user/css/admin.css" %}>
     <style type="text/css">
+        #skillabc_logo{
+            cursor: pointer;
+        }
         #loading_image{
             display: none;
             background-color: rgba(0, 0, 0, 0.75);
@@ -37,8 +40,10 @@
 
 
 <div style="font-size:32px;font-weight:900">
-    WOW 스킬
-    <span style="color:#fe4e65">A</span><span style="color: cornflowerblue;">B</span><span style="color: forestgreen;">C</span>
+    <span onclick="location.href='/wow_skills/'" id="skillabc_logo" alt="skill abc logo">
+        WOW 스킬
+        <span style="color:#fe4e65">A</span><span style="color: cornflowerblue;">B</span><span style="color: forestgreen;">C</span>
+    </span>
     {% block top_right %}
     {% endblock %}
 </div>
