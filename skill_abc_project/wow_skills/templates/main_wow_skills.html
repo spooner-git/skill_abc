@@ -140,7 +140,7 @@
         let skill_use_class = data.wow_class_name;
         let skill_use_specialize = data.wow_specialize_name;
 
-        let html = `<div id="skill_simple_${skill_id}" style="height:40px;font-size:14px;font-weight:500;position:relative">
+        let html = `<div id="skill_simple_${skill_id}" style="height:40px;font-size:14px;font-weight:500;position:relative;cursor:pointer">
                         <img id="skill_simple_image_${skill_id}" src="${skill_image_medium}" style="vertical-align:middle;cursor:pointer;">
                         <span style="vertical-align:middle">${skill_name} - ${skill_use_class}(${skill_use_specialize}) - id:${skill_id}</span>
                     </div>`;
@@ -164,16 +164,19 @@
                         </div>
                     </div>`;
 
-        $(document).off('mouseover', `#skill_simple_image_${skill_id}`).on('mouseover', `#skill_simple_image_${skill_id}`, function(e){
+        $(document).off('mouseenter', `#skill_simple_image_${skill_id}`).on('mouseenter', `#skill_simple_image_${skill_id}`, function(e){
+            e.stopPropagation();
             $('.skill_description_wrapper_hover').remove();
             $(`#skill_simple_${skill_id}`).append(hover);
         });
 
         $(document).off('mouseout', `#skill_simple_image_${skill_id}`).on('mouseout', `#skill_simple_image_${skill_id}`, function(e){
+            e.stopPropagation();
             $('.skill_description_wrapper_hover').remove();
         });
 
-        $(document).off('click', `#skill_simple_image_${skill_id}`).on('click', `#skill_simple_image_${skill_id}`, function(e){
+        $(document).off('click', `#skill_simple_${skill_id}`).on('click', `#skill_simple_${skill_id}`, function(e){
+            $(this).off('mouseout').off('mouseenter');
             let html = dom_skill(data);
             $('#result_display_wrap .result_row').html(html);
         });
