@@ -90,7 +90,8 @@
     var wow_class_specialize_tree = {};
 
     window.addEventListener('load', function () {
-        // automation(); 데이터 미리 For문으로 넣기
+        // automation();
+        //  데이터 미리 For문으로 넣기
         $.ajax({
             url:'/wow_skills/get_wow_class_specialize_data/',
             type:'GET',
@@ -239,21 +240,28 @@
     function automation(){
 
         let $search_input = $('#form_get_wow_skill_info input');
+        let $wow_class = $('#wow_class');
+        let $wow_specialize = $('#wow_specialize');
 
         let length = parsed_summary["skills"].length;
-        for(let i=0; i<2; i++){
+        for(let i=0; i<length; i++){
             (function(z){
                 setTimeout(()=>{
                     let datas = parsed_summary["skills"][i];
                     let skill_id = datas["id"];
+                    let classes_name_code = db_id["cl"][datas["classes_kr"]];
+                    let specialize_code = db_id["sp"][datas["specialize_kr"]];
+
                     $search_input.val(skill_id);
+                    $wow_class.val(classes_name_code);
+                    $wow_specialize.val(specialize_code);
+
                     search_admin();
                     setTimeout(()=>{
                         add_wow_skill();
                     }, 1500);
-                    
-                    console.log(i);
-                    console.log(z, datas);
+
+                    console.log(`작업완료: ${skill_id}, ${datas["classes_kr"]}, ${datas["specialize_kr"]}`);
                 }, 2500*z);
             })(i);
             
