@@ -10,7 +10,6 @@
 //         });
 //     };
 
-   
 
 //      // 문서내에 img 객체를 생성합니다
 //     // let $selector = $(selector);

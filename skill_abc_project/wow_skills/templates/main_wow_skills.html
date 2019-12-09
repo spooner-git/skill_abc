@@ -2,6 +2,28 @@
 
 {% load static_url %}
 {% block local_css %}
+
+<style type="text/css">
+    .skill_images_wrapper{
+
+    }
+    .skill_description_wrapper{
+        width:100%;
+        max-width:350px;
+        padding:10px;
+        border-radius:5px;
+        border:1px solid #f5f2f3;
+        background-color:#161721d9;
+        color:#ffffff;
+        font-weight:500;
+        font-size:14px;
+        box-sizing:border-box
+    }
+    .skill_description_image_extracted{
+        width: 100%;
+        max-width: 350px;
+    }
+</style>
 {% endblock %}
 
 {% block top_right %}
@@ -25,7 +47,7 @@
 
 <div id="result_display_wrap" style="margin-top: 50px;">
     <div class="result_row">
-        <div>
+        <!-- <div>
             <img src="" id="skill_small_img">
             <img src="" id="skill_medium_img">
             <img src="" id="skill_large_img">
@@ -33,7 +55,7 @@
         <div id="description_wrapper" style="display: inline-block;">
         </div>
         <div id="description_wrapper_img">
-        </div>
+        </div> -->
     </div>
 </div>
 {% endblock %}
@@ -57,17 +79,7 @@
             type: 'GET',
 
             beforeSend: function () {
-                $('#skill_id').text('');
-                $('#skill_name').text('');
-                $('#skill_icon').text('');
-                $('#skill_description').text('');
-                $('#skill_cast_time').text('');
-                $('#skill_power_cost').text('');
-                $('#skill_range').text('');
-                $('#skill_cool_down').text('');
-                $('#skill_small_img').attr('src', '');
-                $('#skill_medium_img').attr('src', '');
-                $('#skill_large_img').attr('src', '');
+                loading_image('ON');
             },
 
             success: function (data) {
@@ -78,16 +90,16 @@
                 }
                 let html = '';
                 let wow_skill_data = data.wow_skill;
+
                 for(let i=0; i<wow_skill_data.length; i++){
-                    $('#skill_small_img').attr('src', wow_skill_data[i].wow_small_img_url);
-                    $('#skill_medium_img').attr('src', wow_skill_data[i].wow_medium_img_url);
-                    $('#skill_large_img').attr('src', wow_skill_data[i].wow_large_img_url);
-                    html += dom_description(wow_skill_data[i]);
+                    html += dom_skill(wow_skill_data[i]);
                 }
-                $('#description_wrapper').html(html);
+
+                $('#result_display_wrap .result_row').html(html);
             },
 
             complete: function () {
+                loading_image('OFF');
             },
 
             error: function () {
@@ -95,7 +107,11 @@
         });
     }
 
-    function dom_description(data){
+    function dom_skill(data){
+
+        let skill_image_small = data.wow_small_img_url;
+        let skill_image_medium = data.wow_medium_img_url;
+        let skill_image_large = data.wow_large_img_url;
 
         let skill_id = data.wow_skill_id;
         let skill_name = data.wow_skill_name;
@@ -107,9 +123,14 @@
         let skill_range = data.wow_range;
         let skill_description = data.wow_description;
 
-        let html = 
+        let images = `<div class="skill_images_wrapper">
+                        <img src="${skill_image_small}" title="${skill_name}">
+                        <img src="${skill_image_medium}" title="${skill_name}">
+                        <img src="${skill_image_large}" title="${skill_name}">
+                      </div>`;
+        let description = 
                     `
-                    <div style="width:100%;max-width:300px;padding:10px;border-radius:5px;border:1px solid #f5f2f3;background-color:#161721d9;color:#ffffff;font-weight:500;font-size:14px;box-sizing:border-box">
+                    <div id="skill_description_${skill_id}" class="skill_description_wrapper">
                         <div>${skill_name}</div>
                         <div style="display:flex;margin-top:3px;">
                             ${skill_cost == undefined ? "" : '<div style="flex:1 1 0">'+skill_cost+'</div>'}
@@ -123,6 +144,24 @@
                             ${skill_description == undefined ? "" : skill_description}
                         </div>
                     </div>`;
+        let description_image = 
+                    `<div id="skill_description_image_${skill_id}"></div>`;
+
+        let extract_button = 
+                    `<button type="button" id="skill_description_to_image_${skill_id}">스킬 설명을 이미지 파일로</button>`;
+
+        let html = `<div id="skill_${skill_id}">` + images + description + extract_button + description_image +'</div>';
+
+        $(document).off('click', `#skill_description_to_image_${skill_id}`).on('click', `#skill_description_to_image_${skill_id}`, ()=>{
+            loading_image('ON');
+            html2canvas(document.querySelector(`#skill_description_${skill_id}`)).then(canvas => {                     
+                let image_src = canvas.toDataURL("image/jpeg");
+                document.querySelector(`#skill_description_image_${skill_id}`).innerHTML = `<img src="${image_src}" class="skill_description_image_extracted" title="${skill_name}">`;
+                loading_image('OFF');
+            }); 
+        });
+           
+            
         return html;
     }
 

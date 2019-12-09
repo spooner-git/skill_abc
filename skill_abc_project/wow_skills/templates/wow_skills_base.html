@@ -16,8 +16,25 @@
     <script type="text/javascript" src={% static_url "user/js/const.js" %}></script>
     <link rel="stylesheet" href={% static_url "user/css/base.css" %}>
     <link rel="stylesheet" href={% static_url "user/css/admin.css" %}>
+    <style type="text/css">
+        #loading_image{
+            display: none;
+            background-color: rgba(0, 0, 0, 0.75);
+            padding: 20px;
+            border-radius: 10px;
+            color: #ffffff;
+        }
+    </style>
 </head>
 <body>
+<div id="loading_image" style="position: fixed;top:50%;left:50%;transform: translate(-50%, -50%);text-align: center;">
+    <img src="{% static_url "common/res/loading.gif" %}" style="width: 40px;height: 40px;">
+    <div style="font-size:13px;font-weight: 500;">
+        데이터를 처리 중입니다...<br>
+        잠시만 기다려주세요.
+    </div>
+</div>
+
 
 <div style="font-size:32px;font-weight:900">
     WOW 스킬
@@ -36,6 +53,18 @@
 
 {% block local_js_footer %}
 {% endblock %}
+<script type="text/javascript">
+    function loading_image(on_off){
+        switch(on_off){
+            case "ON":
+                $('#loading_image').show();
+            break;
+            case "OFF":
+                $('#loading_image').hide();
+            break;
+        }
+    }
+</script>
 
 </body>
 </html>

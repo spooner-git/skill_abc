@@ -17,7 +17,7 @@
         </div>
         <div style="flex-basis:110px;height:100%;text-align:right;">
             <button style="height:100%;" onclick="search_admin(event);">검색</button>
-            <button style="height:100%;" onclick="init_admin(event)">초기화</button>
+            <button style="height:100%;" onclick="init_admin(event);">초기화</button>
         </div>
     </form>
 </div>
@@ -48,20 +48,20 @@
                 </div>
             </div>
             <div class="skill_info_row">
-                <div class="skill_info_title">ID</div>
-                <div class="skill_info_content"><input type="text" name="wow_skill_id" id="wow_skill_id" disabled="true"></div>
-            </div>
-            <div class="skill_info_row">
                 <div class="skill_info_title">스킬명</div>
                 <div class="skill_info_content"><input type="text" name="wow_skill_name" id="wow_skill_name" disabled="true"></div>
             </div>
             <div class="skill_info_row">
-                <div class="skill_info_title">아이콘</div>
-                <div class="skill_info_content"><input type="text" name="wow_skill_icon" id="wow_skill_icon" disabled="true"></div>
-            </div>
-            <div class="skill_info_row">
                 <div class="skill_info_title">설명</div>
                 <div class="skill_info_content"><textarea type="text" name="wow_skill_description" id="wow_skill_description" disabled="true"></textarea></div>
+            </div>
+            <div class="skill_info_row">
+                <div class="skill_info_title">ID</div>
+                <div class="skill_info_content"><input type="text" name="wow_skill_id" id="wow_skill_id" disabled="true"></div>
+            </div>
+            <div class="skill_info_row">
+                <div class="skill_info_title">아이콘</div>
+                <div class="skill_info_content"><input type="text" name="wow_skill_icon" id="wow_skill_icon" disabled="true"></div>
             </div>
             <div class="skill_info_row">
                 <div class="skill_info_title">시전시간</div>
@@ -79,7 +79,7 @@
                 <div class="skill_info_title">쿨다운</div>
                 <div class="skill_info_content"><input type="text" name="wow_skill_cool_down" id="wow_skill_cool_down" disabled="true"></div>
             </div>
-            <button style="height:100%;" onclick="add_wow_skill_info(event);">등록</button>
+            <button id="add_wow_skill_form_submit" onclick="add_wow_skill(event);">등록</button>
         </form>
     </div>
 </div>
@@ -90,6 +90,7 @@
     var wow_class_specialize_tree = {};
 
     window.addEventListener('load', function () {
+        // automation(); 데이터 미리 For문으로 넣기
         $.ajax({
             url:'/wow_skills/get_wow_class_specialize_data/',
             type:'GET',
@@ -128,8 +129,11 @@
     }
 
     function search_admin(e){
-        e.stopPropagation();
-        e.preventDefault();
+        if(e != undefined){
+           e.stopPropagation();
+            e.preventDefault(); 
+        }
+        
         $.ajax({
             url: '/wow_skills/get_wow_skill_info_from_blizzard/',
             data: $('#form_get_wow_skill_info').serialize(),
@@ -137,6 +141,7 @@
             type: 'GET',
 
             beforeSend: function () {
+                loading_image('ON');
                 $('#wow_skill_id').val('');
                 $('#wow_skill_name').val('');
                 $('#wow_skill_icon').val('');
@@ -172,6 +177,7 @@
             },
 
             complete: function () {
+                loading_image('OFF');
             },
 
             error: function () {
@@ -179,26 +185,35 @@
         });
     }
 
-    function add_wow_skill_info(e){
-        e.stopPropagation();
-        e.preventDefault();
+    function add_wow_skill(e){
+        if(e != undefined){
+            e.stopPropagation();
+            e.preventDefault();
+        }
+        
+        $('#wow_skill_description').val( $('#wow_skill_description').val().replace(/\n/gi, "<br>") );
         $.ajax({
             url: '/wow_skills/add_wow_skill_info/',
             data: $('#form_wow_skill_info').serialize(),
             dataType: 'json',
-            type: 'GET',
+            type: 'post',
 
             beforeSend: function () {
+                loading_image('ON');
+                // $('input, textarea').attr("disabled", true);
             },
 
             success: function (data) {
-
+                // location.href = '/wow_skills/';
             },
 
             complete: function () {
+                loading_image('OFF');
             },
 
             error: function () {
+                // alert("에러 발생");
+                console.log("에러 발생");
             }
         });
     }
@@ -220,5 +235,30 @@
         $('#wow_specialize').val(selected_specialize);
     }
 
+
+    function automation(){
+
+        let $search_input = $('#form_get_wow_skill_info input');
+
+        let length = parsed_summary["skills"].length;
+        for(let i=0; i<2; i++){
+            (function(z){
+                setTimeout(()=>{
+                    let datas = parsed_summary["skills"][i];
+                    let skill_id = datas["id"];
+                    $search_input.val(skill_id);
+                    search_admin();
+                    setTimeout(()=>{
+                        add_wow_skill();
+                    }, 1500);
+                    
+                    console.log(i);
+                    console.log(z, datas);
+                }, 2500*z);
+            })(i);
+            
+        }
+    }
+    
     </script>
 {% endblock %}
