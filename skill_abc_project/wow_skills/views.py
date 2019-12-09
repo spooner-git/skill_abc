@@ -172,5 +172,5 @@ def add_wow_skill_info_logic(request):
     if error is not None:
         context['error'] = str(error)
 
-    return redirect('/wow_skills/')
-    # return JsonResponse(context, json_dumps_params={'ensure_ascii': True})
+    # return redirect('/wow_skills/')
+    return JsonResponse(context, json_dumps_params={'ensure_ascii': True})
